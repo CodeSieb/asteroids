@@ -8,6 +8,7 @@ from asteroid import Asteroid
 from shot import Shot
 
 pygame.init()
+pygame.mixer.init()
 
 clock = pygame.time.Clock()
 
@@ -24,6 +25,10 @@ def main():
 
     
     player_score = 0
+
+    # Music
+    soundtrack =pygame.mixer.Sound("soundtrack.mp3")
+    soundtrack.play(loops=-1)  # Play the soundtrack in a loop
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
