@@ -20,7 +20,10 @@ def main():
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
 
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
     
+    player_score = 0
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -32,16 +35,21 @@ def main():
     Shot.containers = (shots, updatable, drawable)
     AsteroidField.containers = (updatable)
 
-
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    
     player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
     asteroidfield = AsteroidField()
 
     dt = 0.0
 
     while True:
-        
+
+        my_font = pygame.font.SysFont(None, 30)
+        score_text = my_font.render(f"Score: {player_score}", True, "white")
+        screen.blit(score_text, (10, 10))
+
+
+
+
+
         log_state()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -61,11 +69,15 @@ def main():
                     log_event("asteroid_shot")
                     asteroid.split()
                     shot.kill()
+                    player_score += 1
+                    
 
         
                 
 
         screen.fill("black")
+        score_text = my_font.render(f"Score: {player_score}", True, "white")
+        screen.blit(score_text, (10, 10))
 
         for d in drawable:
             d.draw(screen)
