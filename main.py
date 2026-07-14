@@ -58,9 +58,14 @@ def main():
         updatable.update(dt)
         for asteroid in asteroids:
             if player.collides_with(asteroid):
-                log_event("player_hit")
-                print("Game over!")
-                sys.exit()
+                if player.lives < 1:
+                    log_event("player_hit")
+                    print("Game over!")
+                    sys.exit()
+                else:
+                    log_event("player_hit")
+                    player.lives -= 1
+                    asteroid.split()
             for ast in asteroids:
                 if ast.collides_with(asteroid):
                     ast.reverse_direction()
@@ -77,7 +82,9 @@ def main():
 
         screen.fill("black")
         score_text = my_font.render(f"Score: {player_score}", True, "white")
+        lives_text = my_font.render(f"Lives: {player.lives}", True, "white")
         screen.blit(score_text, (10, 10))
+        screen.blit(lives_text, (10, 40))
 
         for d in drawable:
             d.draw(screen)
