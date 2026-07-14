@@ -7,12 +7,14 @@ from logger import log_event
 class Asteroid(CircleShape):
     def __init__(self, x: float, y: float, radius: float) -> None:
         super().__init__(x, y, radius)
+        self.reverse_direction_cooldown = 0.0
 
     def draw(self, screen) -> None:
         pygame.draw.circle(screen, "white", self.position, self.radius, LINE_WIDTH)
     
     def update(self, dt):
         self.position += (self.velocity * dt)
+        self.reverse_direction_cooldown -= dt
 
     def split(self):
         self.kill()
@@ -28,3 +30,12 @@ class Asteroid(CircleShape):
             new_asteroid2 = Asteroid(self.position.x, self.position.y, new_radius)
             new_asteroid.velocity = self.velocity.rotate(random_angle) * 1.2
             new_asteroid2.velocity = self.velocity.rotate(-random_angle) * 1.2
+
+    def reverse_direction(self):
+        if self.reverse_direction_cooldown > 0:
+            return
+        else: 
+            possible_direction = [(110, 160), (-110, -160)]
+            direction = random.choice(possible_direction)
+            self.velocity = self.velocity.rotate(random.uniform(direction[0], direction[1]))
+            self.reverse_direction_cooldown = 1.0
